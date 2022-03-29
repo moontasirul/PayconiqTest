@@ -6,7 +6,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.payconiq.testApplication.data.remote.ApiEndPoint.Companion.BASE_URL
 import com.payconiq.testApplication.data.remote.apiService.IGitHubUserService
-import com.payconiq.testApplication.utils.Constants.Companion.ASSESS_TOKEN
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +15,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -65,7 +63,7 @@ object AppModule {
             .client(
                 OkHttpClient.Builder().addNetworkInterceptor(HttpLoggingInterceptor()
                     .apply {
-                        level = HttpLoggingInterceptor.Level.BODY
+                       // level = HttpLoggingInterceptor.Level.BODY
                         level = HttpLoggingInterceptor.Level.HEADERS
                     })
                     .addInterceptor { chain ->

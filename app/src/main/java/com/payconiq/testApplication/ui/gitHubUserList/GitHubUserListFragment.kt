@@ -49,13 +49,16 @@ class GitHubUserListFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         viewModel.setNavigator(this)
         viewModel.isLoading.value = true
+        viewModel.fetchGitHubUserResponse()
         setupObservers()
+
     }
 
 
     private fun setupObservers() {
-
-
+        viewModel.response.observe(requireActivity()) { response ->
+            viewModel.getUserResponse(response)
+        }
     }
 
     override fun messageDialog(message: String) {
