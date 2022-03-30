@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -19,39 +20,55 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class GitHubUserListFragment : Fragment(),
-    GitHubUserListNavigator, GitHubUserListRecyclerViewAdapter.CityItemAdapterListener {
+    GitHubUserListNavigator, GitHubUserListRecyclerViewAdapter.GitHubUserItemAdapterListener {
 
     companion object {
         const val USER_ITEM = "USER_ITEM"
     }
 
-    private lateinit var cityAndFoodBinding: FragmentGithubUserListBinding
+    private lateinit var userListBinding: FragmentGithubUserListBinding
     private val viewModel by viewModels<GitHubUserListViewModel>()
 
 
     private lateinit var gitHubUserAdapter: GitHubUserListRecyclerViewAdapter
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        cityAndFoodBinding = FragmentGithubUserListBinding.inflate(layoutInflater)
-        cityAndFoodBinding.lifecycleOwner = this
-
-        cityAndFoodBinding.userListViewModel = viewModel
-
-        return cityAndFoodBinding.root
+        userListBinding = FragmentGithubUserListBinding.inflate(layoutInflater)
+        userListBinding.lifecycleOwner = this
+        userListBinding.userListViewModel = viewModel
+        return userListBinding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setNavigator(this)
-        viewModel.isLoading.value = true
-        viewModel.fetchGitHubUserResponse()
         setupObservers()
+        setUPSearch()
+    }
 
+    private fun setUPSearch() {
+        userListBinding.searchView.isActivated = true
+        userListBinding.searchView.queryHint =
+            requireContext().resources.getString(R.string.search_hits_text)
+        userListBinding.searchView.onActionViewExpanded()
+        userListBinding.searchView.isIconified = false
+        userListBinding.searchView.clearFocus()
+
+        userListBinding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let { viewModel.fetchGitHubUser(it) }
+                userListBinding.searchView.clearFocus()
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
     }
 
 
@@ -96,9 +113,9 @@ class GitHubUserListFragment : Fragment(),
 
 
     override fun onSetUserInfo(userList: ArrayList<Items>) {
-        viewModel.isDataFetching.set(true)
+        viewModel.isDataFetched.value = true
         gitHubUserAdapter = GitHubUserListRecyclerViewAdapter()
-        cityAndFoodBinding.gitHubUserRecyclerView.adapter = gitHubUserAdapter
+        userListBinding.gitHubUserRecyclerView.adapter = gitHubUserAdapter
         gitHubUserAdapter.setListener(this)
         gitHubUserAdapter.clearItems()
         gitHubUserAdapter.addItems(userList)
@@ -109,7 +126,7 @@ class GitHubUserListFragment : Fragment(),
     override fun onUserContent(mUserListModel: Items) {
         val bundle = bundleOf(USER_ITEM to mUserListModel)
         findNavController().navigate(
-            R.id.action_cityAndFoodListFragment_to_DetailFragment,
+            R.id.action_GitHubUserListFragment_to_DetailFragment,
             bundle
         )
     }

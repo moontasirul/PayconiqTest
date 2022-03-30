@@ -8,7 +8,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.payconiq.testApplication.Items
 import com.payconiq.testApplication.R
 import com.payconiq.testApplication.databinding.FragmentDetailsBinding
 import com.payconiq.testApplication.utils.dialogUtils.CustomDialogCallback
@@ -20,8 +19,7 @@ class DetailsFragment : Fragment(), IDetailsNavigator {
 
     companion object {
         const val DIALOG_TAG = "dialog"
-        const val CITY_ITEM = "CITY_ITEM"
-        const val FOOD_ITEM = "FOOD_ITEM"
+        const val GitHubUser_ITEM = "GitHubUser_ITEM"
     }
 
     private lateinit var detailsBinding: FragmentDetailsBinding

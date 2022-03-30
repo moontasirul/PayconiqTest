@@ -19,7 +19,7 @@ android {
 
      //   testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        testInstrumentationRunner "com.wealthPark.testApplication.HiltTestRunner"
+        testInstrumentationRunner "com.payconiq.testApplication.HiltTestRunner"
     }
 
     buildTypes {
@@ -103,8 +103,6 @@ dependencies {
     def lifeCycleVersionKTX = '2.4.1'
     def daggerHiltVersion = '2.40'
     def hiltLifeCycleVersion = '1.0.0-alpha03'
-  //  def room_version = '2.4.2'
-  //  def room_annotation_processor_version = '2.3.0'
 
 
 
@@ -157,19 +155,11 @@ dependencies {
 
 
     // Room
-//    implementation "android.arch.persistence.room:runtime:1.1.1"
-//    kapt "android.arch.persistence.room:compiler:1.1.1"
-//
-//    implementation "androidx.room:room-runtime:$room_version"
-//    annotationProcessor "androidx.room:room-compiler:$room_annotation_processor_version"
-//    val roomVersion = "2.4.2"
     implementation "androidx.room:room-runtime:2.4.2"
     annotationProcessor "androidx.room:room-compiler:2.4.2"
 
     // To use Kotlin annotation processing tool (kapt)
     kapt "androidx.room:room-compiler:2.4.2"
-    // To use Kotlin Symbolic Processing (KSP)
-  //  ksp "androidx.room:room-compiler:2.4.2"
 
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:2.4.2"

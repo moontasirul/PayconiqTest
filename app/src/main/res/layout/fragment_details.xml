@@ -19,7 +19,7 @@
 
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/cityImage"
+            android:id="@+id/GitHubUserImage"
             android:layout_width="match_parent"
             android:layout_height="180dp"
             app:defaultImage="@{`default_image`}"
@@ -43,24 +43,13 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cityImage" />
+            app:layout_constraintTop_toBottomOf="@id/GitHubUserImage" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/car_clean_status_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="16dp"
-            android:text="@={detailsViewModel.description}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title_tv" />
 
 
 
         <com.payconiq.testApplication.utils.CustomProgressBar
-            android:id="@+id/fragment_home_parent_clpb"
+            android:id="@+id/fragment_details_progress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"

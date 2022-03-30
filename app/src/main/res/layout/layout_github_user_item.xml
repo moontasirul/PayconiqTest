@@ -25,7 +25,68 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="8dp"
             android:onClick="@{() -> userItemViewModel.onItemClick()}">
+
+            <com.payconiq.testApplication.utils.CustomRoundedImageView
+                android:id="@+id/user_avatar_iv"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:defaultImage="@{`default_image`}"
+                app:imageData="@{null}"
+                app:imageUrl="@{userItemViewModel.userAvatar}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+            <View
+                android:id="@+id/view_bar"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginBottom="6dp"
+                android:background="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/user_avatar_iv" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/user_login_name_tv"
+                android:layout_width="0dp"
+                android:text="@{userItemViewModel.userLogin}"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/view_bar" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/user_type_tv"
+                android:layout_width="0dp"
+                android:layout_marginStart="6dp"
+                android:text="@{userItemViewModel.type}"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/user_login_name_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/view_bar" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/user_score_tv"
+                android:layout_width="0dp"
+                android:layout_marginStart="6dp"
+                android:text="@{userItemViewModel.userScour}"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/user_type_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/view_bar" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

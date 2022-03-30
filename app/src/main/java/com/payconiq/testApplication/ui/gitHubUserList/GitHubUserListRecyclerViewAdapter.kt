@@ -13,17 +13,16 @@ class GitHubUserListRecyclerViewAdapter(
 ) :
     RecyclerView.Adapter<GitHubUserListRecyclerViewAdapter.UserListViewHolder>() {
 
-    lateinit var mListener: CityItemAdapterListener
+    lateinit var mListener: GitHubUserItemAdapterListener
     private var userList: ArrayList<Items> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListViewHolder {
 
-        val binding: com.payconiq.testApplication.databinding.LayoutGithubUserItemBinding =
-            com.payconiq.testApplication.databinding.LayoutGithubUserItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
+        val binding: LayoutGithubUserItemBinding = LayoutGithubUserItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
 
         return UserListViewHolder(binding)
     }
@@ -51,14 +50,14 @@ class GitHubUserListRecyclerViewAdapter(
     /**
      *Set Listener
      */
-    fun setListener(listener: CityItemAdapterListener) {
+    fun setListener(listener: GitHubUserItemAdapterListener) {
         mListener = listener
     }
 
     /**
      * Adapter Listener
      */
-    interface CityItemAdapterListener {
+    interface GitHubUserItemAdapterListener {
         fun onUserContent(mUserListModel: Items)
         fun onRetryClick()
     }
@@ -71,11 +70,11 @@ class GitHubUserListRecyclerViewAdapter(
         private lateinit var mGitHubUserItemViewModel: GitHubUserItemViewModel
 
         override fun onBind(position: Int) {
-            val mCityListModel: Items = userList[position]
+            val mGitHubUserListModel: Items = userList[position]
             mGitHubUserItemViewModel =
                 GitHubUserItemViewModel(
                     position,
-                    mCityListModel,
+                    mGitHubUserListModel,
                     this
                 )
             mBinding.userItemViewModel = mGitHubUserItemViewModel

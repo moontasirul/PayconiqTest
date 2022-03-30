@@ -8,10 +8,10 @@
     <fragment
         android:id="@+id/gitHubUserListFragment"
         android:name="com.payconiq.testApplication.ui.gitHubUserList.GitHubUserListFragment"
-        android:label="Payconiq Test App"
+        android:label="Payconiq App"
         tools:layout="@layout/fragment_github_user_list">
         <action
-            android:id="@+id/action_cityAndFoodListFragment_to_DetailFragment"
+            android:id="@+id/action_GitHubUserListFragment_to_DetailFragment"
             app:destination="@id/detailFragment" />
     </fragment>
     <fragment
