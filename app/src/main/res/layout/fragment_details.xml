@@ -13,40 +13,57 @@
             type="com.payconiq.testApplication.ui.details.DetailsViewModel" />
     </data>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/GitHubUserImage"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            app:defaultImage="@{`default_image`}"
-            app:imageData="@{null}"
-            app:imageUrl="@{detailsViewModel.userImage}"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/title_tv"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@={detailsViewModel.title}"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/GitHubUserImage" />
+            app:layout_constraintEnd_toEndOf="parent">
 
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
 
+
+                <com.payconiq.testApplication.utils.CustomRoundedImageView
+                    android:id="@+id/user_avatar_iv"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:defaultImage="@{`default_image`}"
+                    app:imageData="@{null}"
+                    app:imageUrl="@{detailsViewModel.userAvatar}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
+                <View
+                    android:id="@+id/view_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/user_avatar_iv"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
 
         <com.payconiq.testApplication.utils.CustomProgressBar
             android:id="@+id/fragment_details_progress"

@@ -8,6 +8,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.payconiq.testApplication.Items
 import com.payconiq.testApplication.R
 import com.payconiq.testApplication.databinding.FragmentDetailsBinding
 import com.payconiq.testApplication.utils.dialogUtils.CustomDialogCallback
@@ -26,11 +27,6 @@ class DetailsFragment : Fragment(), IDetailsNavigator {
     private val viewModel by viewModels<DetailsViewModel>()
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +41,9 @@ class DetailsFragment : Fragment(), IDetailsNavigator {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setNavigator(this)
+        arguments?.getParcelable<Items>(GitHubUser_ITEM)?.let {
+            viewModel.setUserInfo(it)
+        }
     }
 
 

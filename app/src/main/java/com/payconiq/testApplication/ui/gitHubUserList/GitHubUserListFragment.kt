@@ -23,7 +23,7 @@ class GitHubUserListFragment : Fragment(),
     GitHubUserListNavigator, GitHubUserListRecyclerViewAdapter.GitHubUserItemAdapterListener {
 
     companion object {
-        const val USER_ITEM = "USER_ITEM"
+        const val GitHubUser_ITEM = "GitHubUser_ITEM"
     }
 
     private lateinit var userListBinding: FragmentGithubUserListBinding
@@ -124,7 +124,7 @@ class GitHubUserListFragment : Fragment(),
 
 
     override fun onUserContent(mUserListModel: Items) {
-        val bundle = bundleOf(USER_ITEM to mUserListModel)
+        val bundle = bundleOf(GitHubUser_ITEM to mUserListModel)
         findNavController().navigate(
             R.id.action_GitHubUserListFragment_to_DetailFragment,
             bundle
