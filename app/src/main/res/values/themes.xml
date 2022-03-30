@@ -33,4 +33,14 @@
         <item name="android:textColor">@color/lightGrey</item>
         <item name="cornerRadius">16dp</item>
     </style>
+
+    <style name="Theme.Map_application.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.Map_application.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Map_application.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

@@ -15,4 +15,10 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">false</item>
     </style>
+
+    <style name="Theme.Map_application.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
+    </style>
 </resources>
