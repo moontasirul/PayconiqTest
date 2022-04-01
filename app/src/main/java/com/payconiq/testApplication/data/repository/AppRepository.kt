@@ -1,6 +1,7 @@
 package com.payconiq.testApplication.data.repository
 
 import com.payconiq.testApplication.GitHubUser
+import com.payconiq.testApplication.UserInfo
 import com.payconiq.testApplication.data.remote.dataSource.RemoteDataSource
 import com.payconiq.testApplication.data.remote.dataSource.baseDataSource.BaseDataSource
 import com.payconiq.testApplication.utils.Resource
@@ -20,6 +21,12 @@ class AppRepository @Inject constructor(
     suspend fun getGitHubUser(name: String): Flow<Resource<GitHubUser>> {
         return flow {
             emit(dataSource.getAllUser(name))
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getGitHubUserInfo(login: String): Flow<Resource<UserInfo>> {
+        return flow {
+            emit(dataSource.getUserInfo(login))
         }.flowOn(Dispatchers.IO)
     }
 }

@@ -11,4 +11,10 @@
     <string name="dismiss_dialog_txt">Dismiss dialog</string>
     <string name="btn_text_no">No</string>
     <string name="error_message">Something went wrong…</string>
+    <string name="please_search_github_user">Please Search GitHub User</string>
+    <string name="search_hits_text">Type your keyword here</string>
+    <string name="bio">Bio</string>
+    <string name="public_repo">Public Repo</string>
+    <string name="follower">Follower</string>
+    <string name="following">Following</string>
 </resources>

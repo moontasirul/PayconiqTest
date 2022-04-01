@@ -42,7 +42,14 @@ class DetailsFragment : Fragment(), IDetailsNavigator {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setNavigator(this)
         arguments?.getParcelable<Items>(GitHubUser_ITEM)?.let {
-            viewModel.setUserInfo(it)
+            viewModel.fetchUserInfo(it)
+        }
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        viewModel.response.observe(requireActivity()) { response ->
+            viewModel.getUserInfoResponse(response)
         }
     }
 
@@ -75,6 +82,10 @@ class DetailsFragment : Fragment(), IDetailsNavigator {
             isOnlyPositive,
         )
         dialog.show(childFragmentManager, DIALOG_TAG)
+    }
+
+    override fun messageDialog(message: String) {
+        showDialog(requireContext().resources.getString(R.string.msg_failed_title), message, true)
     }
 
 }

@@ -47,7 +47,7 @@ class GitHubUserListViewModel @Inject constructor(
                         userList.addAll(it.items)
                         navigator.onSetUserInfo(userList)
                     } else {
-                        navigator.messageDialog("Data not found...")
+                        navigator.messageDialog(AppEnum.ERROR_MESSAGE.DATA_NOT_FOUND.data)
                     }
 
                 }
