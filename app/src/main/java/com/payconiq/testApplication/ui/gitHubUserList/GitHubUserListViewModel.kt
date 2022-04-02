@@ -19,6 +19,12 @@ class GitHubUserListViewModel @Inject constructor(
     private val repository: AppRepository
 ) : BaseViewModel<GitHubUserListNavigator>() {
 
+    val pageStart: Int = 1
+    var isLastPage: Boolean = false
+    var totalPages: Int = 1
+    var currentPage: Int = pageStart
+
+
     var searchTest = MutableLiveData<String>()
     private val _response: MutableLiveData<NetworkResult<GitHubUser>> = MutableLiveData()
     val response: LiveData<NetworkResult<GitHubUser>> = _response
@@ -29,20 +35,21 @@ class GitHubUserListViewModel @Inject constructor(
 
 
     fun onSearchClick() {
-        searchTest.value?.let { fetchGitHubUser(it) }
+        currentPage = 1
+        searchTest.value?.let { fetchGitHubUser(it, currentPage.toString()) }
         navigator.hideKeyBoard()
     }
 
     fun searchGitHubUser() {
-        searchTest.value?.let { fetchGitHubUser(it) }
+        searchTest.value?.let { fetchGitHubUser(it, currentPage.toString()) }
     }
 
 
-    fun fetchGitHubUser(name: String) {
+    fun fetchGitHubUser(name: String, page: String) {
         viewModelScope.launch {
             isLoading.value = true
             val response = name.let { txt ->
-                repository.getUserBySearchGitHub(txt)
+                repository.getUserBySearchGitHub(txt, page)
             }
             response.let {
                 _response.value = it

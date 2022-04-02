@@ -39,7 +39,7 @@ class AppRepositoryTest : MockWebServerBaseTest() {
     fun `given response ok when fetching results then return a list with elements`() {
         runBlocking {
             mockHttpResponse("GitHubUserSearchSuccessResponse.json", HttpURLConnection.HTTP_OK)
-            val apiResponse = repository.getUserBySearchGitHub(anyString())
+            val apiResponse = repository.getUserBySearchGitHub(anyString(), anyString())
 
             assertNotNull(apiResponse)
             assertEquals(apiResponse.extractData?.items?.size, 30)
@@ -50,7 +50,7 @@ class AppRepositoryTest : MockWebServerBaseTest() {
     fun `given response ok when fetching empty results then return an empty list`() {
         runBlocking {
             mockHttpResponse("GitHubUserSearchFailedResponse.json", HttpURLConnection.HTTP_OK)
-            val apiResponse = repository.getUserBySearchGitHub(anyString())
+            val apiResponse = repository.getUserBySearchGitHub(anyString(), anyString())
 
             assertNotNull(apiResponse)
             assertEquals(apiResponse.extractData?.items?.size, 0)
@@ -62,7 +62,7 @@ class AppRepositoryTest : MockWebServerBaseTest() {
     fun `given response failure when fetching results then return exception`() {
         runBlocking {
             mockHttpResponse(499)
-            val apiResponse = repository.getUserBySearchGitHub(anyString())
+            val apiResponse = repository.getUserBySearchGitHub(anyString(), anyString())
 
             assertNotNull(apiResponse)
             val expectedValue = NetworkResult.Error(Exception(SOMETHING_WRONG))

@@ -12,7 +12,10 @@ import retrofit2.http.Query
 interface IGitHubUserService {
 
     @GET(SEARCH_USER_API)
-    suspend fun getAllGitHubUser(@Query("q") name: String): Response<GitHubUser>
+    suspend fun getAllGitHubUser(
+        @Query("q") name: String,
+        @Query("page") pageNo: String
+    ): Response<GitHubUser>
 
     @GET(USER_DETAILS_API)
     suspend fun getUserInfo(@Path("loginName") loginName: String): Response<UserInfo>

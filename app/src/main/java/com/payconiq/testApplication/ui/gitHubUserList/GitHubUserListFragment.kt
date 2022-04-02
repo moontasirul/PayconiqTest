@@ -1,6 +1,8 @@
 package com.payconiq.testApplication.ui.gitHubUserList
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +12,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.payconiq.testApplication.Items
 import com.payconiq.testApplication.R
 import com.payconiq.testApplication.databinding.FragmentGithubUserListBinding
 import com.payconiq.testApplication.ui.details.DetailsFragment
 import com.payconiq.testApplication.utils.EspressoIdlingResource
+import com.payconiq.testApplication.utils.PaginationScrollListener
 import com.payconiq.testApplication.utils.Utils
 import com.payconiq.testApplication.utils.dialogUtils.CustomDialogCallback
 import com.payconiq.testApplication.utils.dialogUtils.CustomDialogFragment
@@ -52,6 +56,40 @@ class GitHubUserListFragment : Fragment(),
         EspressoIdlingResource.increment()
         setupObservers()
         setUPSearch()
+        setUpRecyclerView()
+    }
+
+    private fun setUpRecyclerView() {
+        userListBinding.gitHubUserRecyclerView.addOnScrollListener(object :
+            PaginationScrollListener(userListBinding.gitHubUserRecyclerView.layoutManager as LinearLayoutManager) {
+            override fun loadMoreItems() {
+                viewModel.isLoading.value = true
+                viewModel.currentPage += 1
+
+                Looper.myLooper()?.let {
+                    Handler(it).postDelayed({
+                        viewModel.searchGitHubUser()
+                    }, 1000)
+                }
+            }
+
+            override fun getTotalPageCount(): Int {
+                return viewModel.totalPages
+            }
+
+            override fun isLastPage(): Boolean {
+                return viewModel.isLastPage
+            }
+
+            override fun isLoading(): Boolean {
+                var loading = false
+                viewModel.isLoading.value?.let {
+                    loading = it
+                }
+                return loading
+            }
+
+        })
     }
 
     private fun setUPSearch() {
@@ -67,6 +105,7 @@ class GitHubUserListFragment : Fragment(),
                 query?.let {
                     if (Utils.hasInternetConnection(requireContext())) {
                         viewModel.searchTest.value = it
+                        viewModel.currentPage = 1
                         viewModel.searchGitHubUser()
                     } else {
                         showDialog(

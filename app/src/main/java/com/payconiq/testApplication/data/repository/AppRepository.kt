@@ -21,10 +21,10 @@ class AppRepository @Inject constructor(
     }
 
 
-    suspend fun getUserBySearchGitHub(name: String): NetworkResult<GitHubUser> {
+    suspend fun getUserBySearchGitHub(name: String, page: String): NetworkResult<GitHubUser> {
         var networkResult: NetworkResult<GitHubUser> = handleSuccess(GitHubUser())
         try {
-            val response = dataSource.getAllGitHubUser(name)
+            val response = dataSource.getAllGitHubUser(name, page)
             response.let {
                 it.body()?.let { userResponse ->
                     networkResult = handleSuccess(userResponse)

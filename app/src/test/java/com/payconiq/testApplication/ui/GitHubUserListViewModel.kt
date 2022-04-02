@@ -54,10 +54,10 @@ class GitHubUserListViewModelTest {
     fun `when fetching results ok then return a list successfully`() {
         testCoroutineRule.runBlockingTest {
             viewModelTest.response.observeForever(responseObserver)
-            whenever(repository.getUserBySearchGitHub(anyString())).thenAnswer {
+            whenever(repository.getUserBySearchGitHub(anyString(), anyString())).thenAnswer {
                 NetworkResult.Success(responseObserver)
             }
-            viewModelTest.fetchGitHubUser(anyString())
+            viewModelTest.fetchGitHubUser(anyString(), anyString())
             assertNotNull(viewModelTest.response.value)
             assertEquals(NetworkResult.Success(responseObserver), viewModelTest.response.value)
         }
@@ -83,10 +83,10 @@ class GitHubUserListViewModelTest {
             viewModelTest.response.observeForever(responseObserver)
             Mockito.`when`(
                 repository.getUserBySearchGitHub(
-                    anyString()
+                    anyString(), anyString()
                 )
             ).thenReturn(NetworkResult.Error(exception))
-            viewModelTest.fetchGitHubUser(anyString())
+            viewModelTest.fetchGitHubUser(anyString(), anyString())
             assertEquals(null, viewModelTest.response.value)
         }
     }
