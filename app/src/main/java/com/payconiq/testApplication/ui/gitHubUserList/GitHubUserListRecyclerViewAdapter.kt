@@ -59,7 +59,6 @@ class GitHubUserListRecyclerViewAdapter(
      */
     interface GitHubUserItemAdapterListener {
         fun onUserContent(mUserListModel: Items)
-        fun onRetryClick()
     }
 
     inner class UserListViewHolder(

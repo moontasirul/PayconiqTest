@@ -1,11 +1,9 @@
 package com.payconiq.testApplication.utils
 
 import android.content.Context
-import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import androidx.core.location.LocationManagerCompat
 
 object Utils {
 
@@ -29,10 +27,5 @@ object Utils {
             networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
             else -> false
         }
-    }
-
-    fun isLocationEnabled(context: Context): Boolean {
-        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return LocationManagerCompat.isLocationEnabled(locationManager)
     }
 }

@@ -14,9 +14,11 @@ import com.payconiq.testApplication.Items
 import com.payconiq.testApplication.R
 import com.payconiq.testApplication.databinding.FragmentGithubUserListBinding
 import com.payconiq.testApplication.ui.details.DetailsFragment
+import com.payconiq.testApplication.utils.Utils
 import com.payconiq.testApplication.utils.dialogUtils.CustomDialogCallback
 import com.payconiq.testApplication.utils.dialogUtils.CustomDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class GitHubUserListFragment : Fragment(),
@@ -60,12 +62,24 @@ class GitHubUserListFragment : Fragment(),
 
         userListBinding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { viewModel.fetchGitHubUser(it) }
+                query?.let {
+                    if (Utils.hasInternetConnection(requireContext())) {
+                        viewModel.searchTest.value = it
+                        viewModel.searchGitHubUser()
+                    } else {
+                        showDialog(
+                            requireContext().resources.getString(R.string.msg_failed_title),
+                            requireContext().resources.getString(R.string.internet_error_message),
+                            true
+                        )
+                    }
+                }
                 userListBinding.searchView.clearFocus()
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.searchTest.value = newText
                 return false
             }
         })
@@ -74,7 +88,9 @@ class GitHubUserListFragment : Fragment(),
 
     private fun setupObservers() {
         viewModel.response.observe(requireActivity()) { response ->
-            viewModel.getUserResponse(response)
+            response?.let {
+                viewModel.getUserResponse(it)
+            }
         }
     }
 
@@ -122,7 +138,6 @@ class GitHubUserListFragment : Fragment(),
     }
 
 
-
     override fun onUserContent(mUserListModel: Items) {
         val bundle = bundleOf(GitHubUser_ITEM to mUserListModel)
         findNavController().navigate(
@@ -131,8 +146,9 @@ class GitHubUserListFragment : Fragment(),
         )
     }
 
-    override fun onRetryClick() {
 
+    override fun hideKeyBoard() {
+        userListBinding.searchView.clearFocus()
     }
 
 }

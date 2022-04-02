@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.payconiq.testApplication.Items
 import com.payconiq.testApplication.R
 import com.payconiq.testApplication.databinding.FragmentDetailsBinding
+import com.payconiq.testApplication.utils.Utils
 import com.payconiq.testApplication.utils.dialogUtils.CustomDialogCallback
 import com.payconiq.testApplication.utils.dialogUtils.CustomDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,7 +43,15 @@ class DetailsFragment : Fragment(), IDetailsNavigator {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setNavigator(this)
         arguments?.getParcelable<Items>(GitHubUser_ITEM)?.let {
-            viewModel.fetchUserInfo(it)
+            if (Utils.hasInternetConnection(requireContext())) {
+                viewModel.fetchUserInfo(it)
+            } else {
+                showDialog(
+                    requireContext().resources.getString(R.string.msg_failed_title),
+                    requireContext().resources.getString(R.string.internet_error_message),
+                    true
+                )
+            }
         }
         setupObservers()
     }

@@ -6,4 +6,5 @@ import com.payconiq.testApplication.ui.base.IBaseNavigator
 interface GitHubUserListNavigator : IBaseNavigator {
     fun onSetUserInfo(userList: ArrayList<Items>)
     fun messageDialog(message: String)
+    fun hideKeyBoard()
 }

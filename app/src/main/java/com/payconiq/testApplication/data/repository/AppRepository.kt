@@ -1,32 +1,68 @@
 package com.payconiq.testApplication.data.repository
 
+import android.util.Log
 import com.payconiq.testApplication.GitHubUser
 import com.payconiq.testApplication.UserInfo
-import com.payconiq.testApplication.data.remote.dataSource.RemoteDataSource
-import com.payconiq.testApplication.data.remote.dataSource.baseDataSource.BaseDataSource
-import com.payconiq.testApplication.utils.Resource
+import com.payconiq.testApplication.data.remote.apiService.IGitHubUserService
+import com.payconiq.testApplication.utils.NetworkResult
 import dagger.hilt.android.scopes.ActivityRetainedScoped
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @ActivityRetainedScoped
 class AppRepository @Inject constructor(
-    private var dataSource: RemoteDataSource
+    private var dataSource: IGitHubUserService
+) : BaseRepository() {
 
-) : BaseDataSource() {
 
-    suspend fun getGitHubUser(name: String): Flow<Resource<GitHubUser>> {
-        return flow {
-            emit(dataSource.getAllUser(name))
-        }.flowOn(Dispatchers.IO)
+    companion object {
+        private val TAG = AppRepository::class.java.name
+        const val GENERAL_ERROR_CODE = 499
     }
 
-    suspend fun getGitHubUserInfo(login: String): Flow<Resource<UserInfo>> {
-        return flow {
-            emit(dataSource.getUserInfo(login))
-        }.flowOn(Dispatchers.IO)
+
+    suspend fun getUserBySearchGitHub(name: String): NetworkResult<GitHubUser> {
+        var networkResult: NetworkResult<GitHubUser> = handleSuccess(GitHubUser())
+        try {
+            val response = dataSource.getAllGitHubUser(name)
+            response.let {
+                it.body()?.let { userResponse ->
+                    networkResult = handleSuccess(userResponse)
+                }
+                it.errorBody()?.let { responseErrorBody ->
+                    if (responseErrorBody is HttpException) {
+                        responseErrorBody.response()?.code()?.let { errorCode ->
+                            networkResult = handleException(errorCode)
+                        }
+                    } else networkResult = handleException(GENERAL_ERROR_CODE)
+                }
+            }
+        } catch (error: HttpException) {
+            Log.e(TAG, "Error: ${error.message}")
+            return handleException(error.code())
+        }
+        return networkResult
+    }
+
+    suspend fun getGitHubUserInfo(login: String): NetworkResult<UserInfo> {
+        var networkResult: NetworkResult<UserInfo> = handleSuccess(UserInfo())
+        try {
+            val userData = dataSource.getUserInfo(login)
+            userData.let {
+                it.body()?.let { userResponse ->
+                    networkResult = handleSuccess(userResponse)
+                }
+                it.errorBody()?.let { responseErrorBody ->
+                    if (responseErrorBody is HttpException) {
+                        responseErrorBody.response()?.code()?.let { errorCode ->
+                            networkResult = handleException(errorCode)
+                        }
+                    } else networkResult = handleException(GENERAL_ERROR_CODE)
+                }
+            }
+        } catch (error: HttpException) {
+            return handleException(error.code())
+        }
+        return networkResult
     }
 }

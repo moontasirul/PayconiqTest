@@ -63,7 +63,6 @@ object AppModule {
             .client(
                 OkHttpClient.Builder().addNetworkInterceptor(HttpLoggingInterceptor()
                     .apply {
-                       // level = HttpLoggingInterceptor.Level.BODY
                         level = HttpLoggingInterceptor.Level.HEADERS
                     })
                     .addInterceptor { chain ->

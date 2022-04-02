@@ -8,9 +8,8 @@ import com.payconiq.testApplication.Items
 import com.payconiq.testApplication.data.repository.AppRepository
 import com.payconiq.testApplication.ui.base.BaseViewModel
 import com.payconiq.testApplication.utils.AppEnum
-import com.payconiq.testApplication.utils.Resource
+import com.payconiq.testApplication.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,45 +19,60 @@ class GitHubUserListViewModel @Inject constructor(
     private val repository: AppRepository
 ) : BaseViewModel<GitHubUserListNavigator>() {
 
+    var searchTest = MutableLiveData<String>()
+    private val _response: MutableLiveData<NetworkResult<GitHubUser>> = MutableLiveData()
+    val response: LiveData<NetworkResult<GitHubUser>> = _response
 
-    private val _response: MutableLiveData<Resource<GitHubUser>> = MutableLiveData()
-    val response: LiveData<Resource<GitHubUser>> = _response
-
-    var userList: ArrayList<Items> = arrayListOf()
+    private var userList: ArrayList<Items> = arrayListOf()
 
     var isDataFetched = MutableLiveData<Boolean>(false)
 
-    fun fetchGitHubUser(userName: String) = viewModelScope.launch {
-        isLoading.value = true
-        repository.getGitHubUser(userName).collect { values ->
-            _response.value = values
+
+    fun onSearchClick() {
+        searchTest.value?.let { fetchGitHubUser(it) }
+        navigator.hideKeyBoard()
+    }
+
+    fun searchGitHubUser() {
+        searchTest.value?.let { fetchGitHubUser(it) }
+    }
+
+
+    fun fetchGitHubUser(name: String) {
+        viewModelScope.launch {
+            isLoading.value = true
+            val response = name.let { txt ->
+                repository.getUserBySearchGitHub(txt)
+            }
+            response.let {
+                _response.value = it
+            }
         }
     }
 
 
-    fun getUserResponse(response: Resource<GitHubUser>) {
-        when (response.status.name) {
-            AppEnum.API_CALL_STATUS.SUCCESS.name -> {
-                response.data?.let {
+    fun getUserResponse(response: NetworkResult<GitHubUser>) {
+        when (response) {
+            is NetworkResult.Success -> {
+                response.data.let { users ->
                     if (userList.isNotEmpty()) {
                         userList.clear()
                     }
-                    if (it.items.isNotEmpty()) {
-                        userList.addAll(it.items)
+                    if (users.items.isNotEmpty()) {
+                        userList.addAll(users.items)
                         navigator.onSetUserInfo(userList)
                     } else {
                         navigator.messageDialog(AppEnum.ERROR_MESSAGE.DATA_NOT_FOUND.data)
                     }
-
                 }
                 isLoading.value = false
             }
-            AppEnum.API_CALL_STATUS.ERROR.name -> {
-                isLoading.value = false
-                response.message?.let { navigator.messageDialog(it) }
-            }
-            AppEnum.API_CALL_STATUS.LOADING.name -> {
+            is NetworkResult.InProgress -> {
                 isLoading.value = true
+            }
+            is NetworkResult.Error -> {
+                isLoading.value = false
+                response.exception.message?.let { navigator.messageDialog(it) }
             }
         }
     }

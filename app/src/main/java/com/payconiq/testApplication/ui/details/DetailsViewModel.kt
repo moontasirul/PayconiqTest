@@ -8,9 +8,8 @@ import com.payconiq.testApplication.UserInfo
 import com.payconiq.testApplication.data.repository.AppRepository
 import com.payconiq.testApplication.ui.base.BaseViewModel
 import com.payconiq.testApplication.utils.AppEnum
-import com.payconiq.testApplication.utils.Resource
+import com.payconiq.testApplication.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,8 +18,8 @@ class DetailsViewModel @Inject constructor(
     private val repository: AppRepository
 ) : BaseViewModel<IDetailsNavigator>() {
 
-    private val _response: MutableLiveData<Resource<UserInfo>> = MutableLiveData()
-    val response: LiveData<Resource<UserInfo>> = _response
+    private val _response: MutableLiveData<NetworkResult<UserInfo>> = MutableLiveData()
+    val response: LiveData<NetworkResult<UserInfo>> = _response
 
     var title = MutableLiveData<String>()
     var name = MutableLiveData<String>()
@@ -35,27 +34,28 @@ class DetailsViewModel @Inject constructor(
     fun fetchUserInfo(item: Items) = viewModelScope.launch {
         isLoading.value = true
         item.login?.let {
-            repository.getGitHubUserInfo(it).collect { values ->
+            val userResponse = repository.getGitHubUserInfo(it)
+            userResponse.let { values ->
                 _response.value = values
             }
         }
     }
 
 
-    fun getUserInfoResponse(response: Resource<UserInfo>) {
-        when (response.status.name) {
-            AppEnum.API_CALL_STATUS.SUCCESS.name -> {
-                response.data?.let {
+    fun getUserInfoResponse(response: NetworkResult<UserInfo>) {
+        when (response) {
+            is NetworkResult.Success -> {
+                response.data.let {
                     setUserData(it)
                 }
                 isLoading.value = false
             }
-            AppEnum.API_CALL_STATUS.ERROR.name -> {
-                isLoading.value = false
-                response.message?.let { navigator.messageDialog(it) }
-            }
-            AppEnum.API_CALL_STATUS.LOADING.name -> {
+            is NetworkResult.InProgress -> {
                 isLoading.value = true
+            }
+            is NetworkResult.Error -> {
+                isLoading.value = false
+                response.exception.message?.let { navigator.messageDialog(it) }
             }
         }
     }
