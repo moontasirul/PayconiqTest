@@ -24,8 +24,9 @@ class GitHubUserListViewModel @Inject constructor(
     var totalPages: Int = 1
     var currentPage: Int = pageStart
 
+    var tempKey = ""
 
-    var searchTest = MutableLiveData<String>()
+    var searchText = MutableLiveData<String>()
     private val _response: MutableLiveData<NetworkResult<GitHubUser>> = MutableLiveData()
     val response: LiveData<NetworkResult<GitHubUser>> = _response
 
@@ -36,12 +37,12 @@ class GitHubUserListViewModel @Inject constructor(
 
     fun onSearchClick() {
         currentPage = 1
-        searchTest.value?.let { fetchGitHubUser(it, currentPage.toString()) }
+        searchText.value?.let { fetchGitHubUser(it, currentPage.toString()) }
         navigator.hideKeyBoard()
     }
 
     fun searchGitHubUser() {
-        searchTest.value?.let { fetchGitHubUser(it, currentPage.toString()) }
+        searchText.value?.let { fetchGitHubUser(it, currentPage.toString()) }
     }
 
 
@@ -57,12 +58,11 @@ class GitHubUserListViewModel @Inject constructor(
         }
     }
 
-
     fun getUserResponse(response: NetworkResult<GitHubUser>) {
         when (response) {
             is NetworkResult.Success -> {
                 response.data.let { users ->
-                    if (userList.isNotEmpty()) {
+                    if (tempKey != searchText.value.toString()) {
                         userList.clear()
                     }
                     if (users.items.isNotEmpty()) {
@@ -72,6 +72,7 @@ class GitHubUserListViewModel @Inject constructor(
                         navigator.messageDialog(AppEnum.ERROR_MESSAGE.DATA_NOT_FOUND.data)
                     }
                 }
+                tempKey = searchText.value.toString()
                 isLoading.value = false
             }
             is NetworkResult.InProgress -> {

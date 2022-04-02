@@ -112,7 +112,7 @@ class GitHubUserListFragment : Fragment(),
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
                     if (Utils.hasInternetConnection(requireContext())) {
-                        viewModel.searchTest.value = it
+                        viewModel.searchText.value = it
                         viewModel.currentPage = 1
                         viewModel.searchGitHubUser()
                     } else {
@@ -128,7 +128,7 @@ class GitHubUserListFragment : Fragment(),
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.searchTest.value = newText
+                viewModel.searchText.value = newText
                 return false
             }
         })
@@ -183,8 +183,10 @@ class GitHubUserListFragment : Fragment(),
         gitHubUserAdapter = GitHubUserListRecyclerViewAdapter()
         userListBinding.gitHubUserRecyclerView.adapter = gitHubUserAdapter
         gitHubUserAdapter.setListener(this)
-        gitHubUserAdapter.clearItems()
         gitHubUserAdapter.addItems(userList)
+        val position =
+            userList.size - 30 // always api return new 30 items, so that list focus on last index
+        userListBinding.gitHubUserRecyclerView.scrollToPosition(position);
     }
 
 
