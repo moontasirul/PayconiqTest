@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.payconiq.testApplication.data.remote.ApiEndPoint.Companion.API_HEADER
 import com.payconiq.testApplication.data.remote.ApiEndPoint.Companion.BASE_URL
 import com.payconiq.testApplication.data.remote.apiService.IGitHubUserService
 import dagger.Module
@@ -68,7 +69,7 @@ object AppModule {
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder().addHeader(
                             "Accept",
-                            "application/vnd.github.v3+json"
+                            API_HEADER
                         ).build()
                         chain.proceed(request)
                     }.build()
