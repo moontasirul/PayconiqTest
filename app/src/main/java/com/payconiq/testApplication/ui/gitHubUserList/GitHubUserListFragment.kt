@@ -68,7 +68,15 @@ class GitHubUserListFragment : Fragment(),
 
                 Looper.myLooper()?.let {
                     Handler(it).postDelayed({
-                        viewModel.searchGitHubUser()
+                        if (Utils.hasInternetConnection(requireContext())) {
+                            viewModel.searchGitHubUser()
+                        } else {
+                            showDialog(
+                                requireContext().resources.getString(R.string.msg_failed_title),
+                                requireContext().resources.getString(R.string.internet_error_message),
+                                true
+                            )
+                        }
                     }, 1000)
                 }
             }
