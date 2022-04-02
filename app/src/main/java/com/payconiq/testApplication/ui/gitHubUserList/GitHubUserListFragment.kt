@@ -14,6 +14,7 @@ import com.payconiq.testApplication.Items
 import com.payconiq.testApplication.R
 import com.payconiq.testApplication.databinding.FragmentGithubUserListBinding
 import com.payconiq.testApplication.ui.details.DetailsFragment
+import com.payconiq.testApplication.utils.EspressoIdlingResource
 import com.payconiq.testApplication.utils.Utils
 import com.payconiq.testApplication.utils.dialogUtils.CustomDialogCallback
 import com.payconiq.testApplication.utils.dialogUtils.CustomDialogFragment
@@ -48,6 +49,7 @@ class GitHubUserListFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setNavigator(this)
+        EspressoIdlingResource.increment()
         setupObservers()
         setUPSearch()
     }
@@ -89,6 +91,7 @@ class GitHubUserListFragment : Fragment(),
     private fun setupObservers() {
         viewModel.response.observe(requireActivity()) { response ->
             response?.let {
+                EspressoIdlingResource.decrement()
                 viewModel.getUserResponse(it)
             }
         }
