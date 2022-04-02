@@ -1,4 +1,4 @@
-package co.cdmunoz.nasaroverphotos.ui.home
+package com.payconiq.testApplication.ui
 
 import androidx.lifecycle.Lifecycle
 import androidx.test.espresso.Espresso.onView
@@ -9,11 +9,10 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.payconiq.testApplication.EspressoIdlingResourceRule
-import com.payconiq.testApplication.EspressoTestsHelpers
 import com.payconiq.testApplication.R
-import com.payconiq.testApplication.ui.MainActivity
 import com.payconiq.testApplication.ui.gitHubUserList.GitHubUserListRecyclerViewAdapter
+import com.payconiq.testApplication.utils.EspressoIdlingResourceRule
+import com.payconiq.testApplication.utils.EspressoTestsHelpers
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

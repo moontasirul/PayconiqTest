@@ -1,7 +1,6 @@
-package com.payconiq.testApplication
+package com.payconiq.testApplication.utils
 
 import androidx.test.espresso.IdlingRegistry
-import com.payconiq.testApplication.utils.EspressoIdlingResource
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
